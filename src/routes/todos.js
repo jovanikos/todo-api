@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Todo = require('../models/todo');
 
+const VALID_PRIORITIES = ['low', 'medium', 'high'];
+
 // GET /todos
 router.get('/', (req, res) => {
   res.json(Todo.getAll());
@@ -16,9 +18,12 @@ router.get('/:id', (req, res) => {
 
 // POST /todos
 router.post('/', (req, res) => {
-  const { title } = req.body;
+  const { title, priority } = req.body;
   if (!title) return res.status(400).json({ error: 'title is required' });
-  res.status(201).json(Todo.create(title));
+  if (priority && !VALID_PRIORITIES.includes(priority)) {
+    return res.status(400).json({ error: 'priority must be low, medium or high' });
+  }
+  res.status(201).json(Todo.create(title, priority));
 });
 
 // PATCH /todos/:id

@@ -9,8 +9,8 @@ function getById(id) {
   return todos.find(t => t.id === id) || null;
 }
 
-function create(title) {
-  const todo = { id: nextId++, title, done: false };
+function create(title, priority) {
+  const todo = { id: nextId++, title, done: false, priority: priority || 'medium' };
   todos.push(todo);
   return todo;
 }
